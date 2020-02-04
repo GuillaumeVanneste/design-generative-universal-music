@@ -4,7 +4,8 @@ nom du groupe
 date -> concert
 position géographique
 salle / siege
-heure de debut et fin
+(heure de debut et fin)
+Nom du spectateur
 
 - inspi -
 luminescence
@@ -15,6 +16,8 @@ code bar sur les deux parts
 nom du concert
 infos+
 
+Visu génératif --> nom du spectateur + place + timestamp transaction
+
 */
 
 /*-------------------*/
@@ -24,32 +27,60 @@ let ticket = {};
 let detachable = {};
 let barcode = {};
 let data = {};
+let seed;
+
 
 // function preload() {
 //     webImage = loadImage('https://images.unsplash.com/photo-1566590671647-bc34ac594c1b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80');
 // }
 
+ticket.rowCount = 20;
+ticket.columnCount = 20;
+ticket.rectWidth = 20;
+
+detachable.startX = 432;
+detachable.startY = 0;
+detachable.borderCount = 40;
+
 function setup() {
     //pixelDensity(4);
+    ticket.seed = random(500);
+    frameRate(20);
     
-    // Data
+    // DATA
+    // background
     data.name = "nomdugroupe";
     data.month = floor(random(1, 12));
     data.color = data.name.length * data.month;
 
-    // ticket
+    // pattern
+    ticket.startX = 75;
+    ticket.startY = 75;
+    ticket.patternW = 431;
+    ticket.patternH = 240;
+
+    data.buyer = "John Doe"
+    data.place = floor(random(1, 760));
+    data.dateTransaction = Date.now();
+    data.pattern = (data.buyer.length * data.place * data.dateTransaction)%360;
+
+    // TICKET
     ticket.totalWidht = 576;
     ticket.totalHeight = 240;
     //ticket.bgColor = color(`hsb(${data.color}, 50%, 40%)`);
     ticket.bgColor = color(`hsb(${data.color}, 50%, 20%)`);
+    console.log("BG Color : ",ticket.bgColor);
+    
+    // Motif généré
+    ticket.randomColors = [];
+    for (let i = 0; i < ticket.rowCount; i++) {
+        let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.1)`);
+        ticket.randomColors.push(c);
+    };
+    console.log("Pattern Color : ",ticket.randomColors);
+    console.log("Pattern : ",data.pattern);
+    ticket.patternColor = color(`hsb(${data.pattern}, 50%, 20%)`);
 
-    ticket.rowCount = 20;
-    ticket.columnCount = 20;
-    ticket.rectWidth = 20;
-
-    detachable.startX = 432;
-    detachable.startY = 0;
-    detachable.borderCount = 40;
 
     /* Web Image random color
     ticket.randomColors = [];
@@ -77,15 +108,32 @@ function setup() {
 function draw() {
     background(ticket.bgColor);
     drawDetachablePart()
+    drawLeftPart(432, 240)
     drawBarcode(barcode.startX, barcode.startY);
     drawBarcode(detachable.startX - barcode.rectWidth, ticket.totalHeight - barcode.rectTotalHeight);
-    drawLeftPart(432, 240)
     
 }
 
-function drawLeftPart(w, h) {
 
+function drawLeftPart(w, h) {
+    randomSeed(ticket.seed);
+    noStroke();
+    push();
+    let cellW = ticket.patternW / ticket.columnCount;
+    let cellH = ticket.patternH / ticket.rowCount;
+    for (let i = 0; i < ticket.columnCount; i++) {
+        for (let j = 0; j < ticket.rowCount; j++) {
+            let x = i * cellW;
+            let y = j * cellH;
+            fill(ticket.randomColors[i]);
+            push();
+            rect(x, y, random(cellW)*ticket.rectWidth, random(cellH))*ticket.rectTotalHeight;
+            pop();
+        };
+    };
+    pop();
 }
+
 
 function drawDetachablePart() {
     noStroke();
