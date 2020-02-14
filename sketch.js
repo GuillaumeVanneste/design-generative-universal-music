@@ -28,6 +28,13 @@ let detachable = {};
 let barcode = {};
 let data = {};
 let seed;
+let infoBox = {};
+let myTab = [
+    ['Room', 'D'],
+    ['Sit', '24'],
+    ['AA', 'XX'],
+    ['BB', 'YY'],
+];
 
 
 // function preload() {
@@ -41,6 +48,12 @@ ticket.rectWidth = 20;
 detachable.startX = 432;
 detachable.startY = 0;
 detachable.borderCount = 40;
+
+infoBox.startX = detachable.startX + 21;
+infoBox.startY = 10;
+infoBox.widht = 26;
+infoBox.height = 46;
+infoBox.marginBetween = 10;
 
 function setup() {
     //pixelDensity(4);
@@ -93,10 +106,10 @@ function setup() {
     */
     
     // Barcode
-    barcode.startX = detachable.startX + 70;
-    barcode.startY = 70;
-    barcode.rectWidth = 50;
-    barcode.rectTotalHeight = 100;
+    barcode.startX = detachable.startX + 90;
+    barcode.startY = ticket.totalHeight/3;
+    barcode.rectWidth = 40;
+    barcode.rectTotalHeight = ticket.totalHeight/3;
     barcode.rectCount = 25;
     barcode.seed = random(500);
 
@@ -109,8 +122,16 @@ function draw() {
     background(ticket.bgColor);
     drawDetachablePart()
     drawLeftPart(432, 240)
+    push();
+    translate(detachable.startX - barcode.rectTotalHeight*0.2, ticket.totalHeight - barcode.rectWidth * 1.2);
+    rotate(radians(90));
+    drawBarcode(0, 0);
+    pop();
     drawBarcode(barcode.startX, barcode.startY);
-    drawBarcode(detachable.startX - barcode.rectWidth, ticket.totalHeight - barcode.rectTotalHeight);
+
+    for(let i=0; i < myTab.length; i++) {
+        drawInfo(infoBox.startX, infoBox.startY + (infoBox.height + infoBox.marginBetween) * i, myTab[i][0], myTab[i][1]);
+    }
     
 }
 
@@ -156,6 +177,27 @@ function drawBarcode(posX, posY) {
         let y = posY + (i * h);
         rect(posX, y, barcode.rectWidth, random(h));
     }
+}
+
+function drawInfo(x, y, label, value) {
+    resetMatrix();
+    let c = color(255);
+    fill(c);
+    rect(x, y, infoBox.widht, infoBox.height, 20);
+    push();
+    translate(x + 20 , y + 25);
+    rotate(radians(-90));
+    textSize(16);
+    fill(0);
+    textAlign(CENTER);
+    text(value, 0, 0);
+    pop();
+    translate(x + 44, y + 25);
+    rotate(radians(-90));
+    textSize(16);
+    fill(c);
+    textAlign(CENTER);
+    text(label, 0, 0);
 }
 
 function keyTyped() {
