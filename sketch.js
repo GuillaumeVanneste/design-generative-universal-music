@@ -49,12 +49,6 @@ detachable.startX = 432;
 detachable.startY = 0;
 detachable.borderCount = 40;
 
-infoBox.startX = detachable.startX + 21;
-infoBox.startY = 10;
-infoBox.widht = 26;
-infoBox.height = 46;
-infoBox.marginBetween = 10;
-
 function setup() {
     //pixelDensity(4);
     ticket.seed = random(500);
@@ -83,7 +77,16 @@ function setup() {
     //ticket.bgColor = color(`hsb(${data.color}, 50%, 40%)`);
     ticket.bgColor = color(`hsb(${data.color}, 50%, 20%)`);
     console.log("BG Color : ",ticket.bgColor);
-    
+
+    // INFOBOX
+    infoBox.startX = detachable.startX + 21;
+    infoBox.widht = 26;
+    infoBox.height = 46;
+    infoBox.marginBetween = 10;
+    infoBox.startY = (ticket.totalHeight - (infoBox.height + (infoBox.height + infoBox.marginBetween) * 3)) / 2;
+    console.log(infoBox.startY);
+
+
     // Motif généré
     ticket.randomColors = [];
     for (let i = 0; i < ticket.rowCount; i++) {
@@ -107,9 +110,9 @@ function setup() {
     
     // Barcode
     barcode.startX = detachable.startX + 90;
-    barcode.startY = ticket.totalHeight/3;
+    barcode.startY = ticket.totalHeight/4;
     barcode.rectWidth = 40;
-    barcode.rectTotalHeight = ticket.totalHeight/3;
+    barcode.rectTotalHeight = ticket.totalHeight/2;
     barcode.rectCount = 25;
     barcode.seed = random(500);
 
@@ -185,14 +188,14 @@ function drawInfo(x, y, label, value) {
     fill(c);
     rect(x, y, infoBox.widht, infoBox.height, 20);
     push();
-    translate(x + 20 , y + 25);
+    translate(x + infoBox.widht/1.4 , y + infoBox.height/2);
     rotate(radians(-90));
     textSize(16);
     fill(0);
     textAlign(CENTER);
     text(value, 0, 0);
     pop();
-    translate(x + 44, y + 25);
+    translate(x + infoBox.widht + 18, y + infoBox.height/2);
     rotate(radians(-90));
     textSize(16);
     fill(c);
