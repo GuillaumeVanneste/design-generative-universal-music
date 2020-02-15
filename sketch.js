@@ -12,9 +12,8 @@ luminescence
 
 
 - TODO -
-code bar sur les deux parts
+Animation generatif
 nom du concert
-infos+
 
 Visu génératif --> nom du spectateur + place + timestamp transaction
 
@@ -26,20 +25,29 @@ Visu génératif --> nom du spectateur + place + timestamp transaction
 let ticket = {};
 let detachable = {};
 let barcode = {};
-let data = {};
 let seed;
 let infoBox = {};
-let myTab = [
+let data = {};
+let tabData = [
     ['Room', 'D'],
     ['Sit', '24'],
     ['AA', 'XX'],
     ['BB', 'YY'],
 ];
 
+//Font Preload
 
-// function preload() {
-//     webImage = loadImage('https://images.unsplash.com/photo-1566590671647-bc34ac594c1b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80');
-// }
+let exo2;
+let narrow;
+let saira;
+function preload() {
+    exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
+    narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
+    saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
+}
+
+
+/* ----------------------- */
 
 ticket.rowCount = 20;
 ticket.columnCount = 20;
@@ -53,6 +61,11 @@ function setup() {
     //pixelDensity(4);
     ticket.seed = random(500);
     frameRate(20);
+    
+
+    //textFont(exo2);
+    textFont(narrow);
+    //textFont(saira);
     
     // DATA
     // background
@@ -81,7 +94,7 @@ function setup() {
     // INFOBOX
     infoBox.startX = detachable.startX + 21;
     infoBox.widht = 26;
-    infoBox.height = 46;
+    infoBox.height = 38;
     infoBox.marginBetween = 10;
     infoBox.startY = (ticket.totalHeight - (infoBox.height + (infoBox.height + infoBox.marginBetween) * 3)) / 2;
     console.log(infoBox.startY);
@@ -123,8 +136,8 @@ function setup() {
 
 function draw() {
     background(ticket.bgColor);
-    drawDetachablePart()
     drawLeftPart(432, 240)
+    drawDetachablePart()
     push();
     translate(detachable.startX - barcode.rectTotalHeight*0.2, ticket.totalHeight - barcode.rectWidth * 1.2);
     rotate(radians(90));
@@ -132,8 +145,8 @@ function draw() {
     pop();
     drawBarcode(barcode.startX, barcode.startY);
 
-    for(let i=0; i < myTab.length; i++) {
-        drawInfo(infoBox.startX, infoBox.startY + (infoBox.height + infoBox.marginBetween) * i, myTab[i][0], myTab[i][1]);
+    for(let i=0; i < tabData.length; i++) {
+        drawInfo(infoBox.startX, infoBox.startY + (infoBox.height + infoBox.marginBetween) * i, tabData[i][0], tabData[i][1]);
     }
     
 }
@@ -183,8 +196,7 @@ function drawBarcode(posX, posY) {
 }
 
 function drawInfo(x, y, label, value) {
-    resetMatrix();
-    let c = color(255);
+    let c = color(`hsb(${data.pattern}, 50%, 90%)`); // Si h = une certaine valeur -> passer la font en white ?
     fill(c);
     rect(x, y, infoBox.widht, infoBox.height, 20);
     push();
@@ -195,12 +207,14 @@ function drawInfo(x, y, label, value) {
     textAlign(CENTER);
     text(value, 0, 0);
     pop();
+    push();
     translate(x + infoBox.widht + 18, y + infoBox.height/2);
     rotate(radians(-90));
     textSize(16);
     fill(c);
     textAlign(CENTER);
     text(label, 0, 0);
+    pop();
 }
 
 function keyTyped() {
