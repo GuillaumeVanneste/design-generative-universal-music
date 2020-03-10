@@ -41,9 +41,9 @@ let exo2;
 let narrow;
 let saira;
 function preload() {
-    exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
-    narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
-    saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
+    // exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
+    // narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
+    // saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
 }
 
 
@@ -64,7 +64,7 @@ function setup() {
     
 
     //textFont(exo2);
-    textFont(narrow);
+    //textFont(narrow);
     //textFont(saira);
     
     // DATA
@@ -103,7 +103,7 @@ function setup() {
     // Motif généré
     ticket.randomColors = [];
     for (let i = 0; i < ticket.rowCount; i++) {
-        let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.1)`);
+        let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.2)`);
         ticket.randomColors.push(c);
     };
     console.log("Pattern Color : ",ticket.randomColors);
@@ -162,9 +162,10 @@ function drawLeftPart(w, h) {
         for (let j = 0; j < ticket.rowCount; j++) {
             let x = i * cellW;
             let y = j * cellH;
+            rotate(random(0, data.place));
             fill(ticket.randomColors[i]);
             push();
-            rect(x, y, random(cellW)*ticket.rectWidth, random(cellH))*ticket.rectTotalHeight;
+            rect(x, y, random(cellW)*ticket.rectWidth*data.place, random(cellH))*ticket.rectTotalHeight*data.place;
             pop();
         };
     };
