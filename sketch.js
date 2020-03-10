@@ -29,10 +29,10 @@ let seed;
 let infoBox = {};
 let data = {};
 let tabData = [
-    ['Room', 'D'],
     ['Sit', '24'],
-    ['AA', 'XX'],
-    ['BB', 'YY'],
+    ['Rank', 'D'],
+    ['Block', 'XX'],
+    ['Gate', 'YY'],
 ];
 
 //Font Preload
