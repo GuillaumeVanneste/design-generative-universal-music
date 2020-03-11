@@ -28,9 +28,11 @@ let barcode = {};
 let seed;
 let infoBox = {};
 let data = {};
+let user_firstname;
+let user_lastname;
 let tabData = [
     ['Room', 'D'],
-    ['Sit', '24'],
+    ['Sit', '15'],
     ['AA', 'XX'],
     ['BB', 'YY'],
 ];
@@ -129,7 +131,8 @@ function setup() {
     barcode.rectCount = 25;
     barcode.seed = random(500);
 
-    createCanvas(ticket.totalWidht, ticket.totalHeight); // Canvas size
+    let canva = createCanvas(ticket.totalWidht, ticket.totalHeight); // Canvas size
+    canva.parent('ticket');
 
     
 }
@@ -142,13 +145,17 @@ function draw() {
     translate(detachable.startX - barcode.rectTotalHeight*0.2, ticket.totalHeight - barcode.rectWidth * 1.2);
     rotate(radians(90));
     drawBarcode(0, 0);
+    for(let i=0; i < tabData.length; i++) {
+        drawInfo(-5, 180 + (infoBox.height + infoBox.marginBetween) * i, tabData[i][0], tabData[i][1]);
+    }
     pop();
     drawBarcode(barcode.startX, barcode.startY);
 
     for(let i=0; i < tabData.length; i++) {
         drawInfo(infoBox.startX, infoBox.startY + (infoBox.height + infoBox.marginBetween) * i, tabData[i][0], tabData[i][1]);
     }
-    
+
+    drawUserInfo(detachable.startX - 12, 72, user_firstname, user_lastname);
 }
 
 
@@ -215,6 +222,16 @@ function drawInfo(x, y, label, value) {
     textAlign(CENTER);
     text(label, 0, 0);
     pop();
+}
+
+function drawUserInfo(x, y, firstname, lastname) {
+    textSize(32);
+    fill(255);
+    textAlign(RIGHT);
+    text("NOM DU CONCERT", x, y - 32);
+    textSize(24);
+    text(firstname, x, y);
+    text(lastname, x, y + 24);
 }
 
 function keyTyped() {
