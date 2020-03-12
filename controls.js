@@ -18,6 +18,9 @@ posters.forEach((poster) => {
             poster.classList.add("selected");
             data.name = poster.children[1].textContent;
             data.style = poster.children[2].textContent;
+            console.log(count(data.name));
+            console.log(data.style.length);
+            console.log(count(data.name) * data.style.length);
             data.color = (count(data.name) * data.style.length)%360;
             console.log(data.color);
         }
