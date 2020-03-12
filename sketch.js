@@ -72,6 +72,7 @@ function setup() {
     // DATA
     // background
     data.name = "";
+    data.style = "";
     data.month = floor(random(1, 12));
     data.color = data.name.length * data.month;
 
@@ -138,7 +139,7 @@ function setup() {
 }
 
 function draw() {
-    background(color(`hsb(${data.name.length * 5}, 50%, 20%)`));
+    background(color(`hsb(${data.color}, 50%, 20%)`));
     drawLeftPart(432, 240)
     drawDetachablePart()
     push();

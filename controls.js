@@ -9,13 +9,17 @@ posters.forEach((poster) => {
                 poster.classList.remove("selected");
             });
             data.name = "";
+            data.style = "";
         } else {
             posters.forEach(function(poster) {
                 poster.classList.remove("selected");
             });
             e.preventDefault();
             poster.classList.add("selected");
-            data.name = poster.childNodes[1].textContent;
+            data.name = poster.children[1].textContent;
+            data.style = poster.children[2].textContent;
+            data.color = (count(data.name) * data.style.length)%360;
+            console.log(data.color);
         }
     });
 });
@@ -57,3 +61,48 @@ previous2.addEventListener("mousedown", () => {
     step1.classList.remove("hidden");
     step2.classList.add("hidden");
 })
+
+
+function str_split(string, split_length) {
+    //  discuss at: http://phpjs.org/functions/str_split/
+    // original by: Martijn Wieringa
+    // improved by: Brett Zamir (http://brett-zamir.me)
+    // bugfixed by: Onno Marsman
+    //  revised by: Theriault
+    //  revised by: Rafał Kukawski (http://blog.kukawski.pl/)
+    //    input by: Bjorn Roesbeke (http://www.bjornroesbeke.be/)
+    //   example 1: str_split('Hello Friend', 3);
+    //   returns 1: ['Hel', 'lo ', 'Fri', 'end']
+  
+    if (split_length == null) {
+      split_length = 1;
+    }
+    if (string == null || split_length < 1) {
+      return false;
+    }
+    string += '';
+    var chunks = [],
+      pos = 0,
+      len = string.length;
+    while (pos < len) {
+      chunks.push(string.slice(pos, pos += split_length));
+    }
+  
+    return chunks;
+  }
+  
+  
+  function count(string){
+      var alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+  
+      var splitted_string = str_split(string);
+  
+      var count = 0;
+      for (i = 0; i < splitted_string.length; i++) { 
+          var letterPosition = alphabet.indexOf(splitted_string[i])+1;
+          count = count + letterPosition;
+      }
+      return count;
+  }
+  
+  
