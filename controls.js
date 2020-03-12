@@ -4,12 +4,19 @@ const next = step0.querySelector('#next');
 
 posters.forEach((poster) => {
     poster.addEventListener('mousedown', (e) => {
-        posters.forEach(function(poster) {
-            poster.classList.remove("selected");
-        });
-        e.preventDefault();
-        poster.classList.add("selected");
-        data.name = poster.childNodes[1].textContent;
+        if(poster.classList.contains("selected")) {
+            posters.forEach(function(poster) {
+                poster.classList.remove("selected");
+            });
+            data.name = "";
+        } else {
+            posters.forEach(function(poster) {
+                poster.classList.remove("selected");
+            });
+            e.preventDefault();
+            poster.classList.add("selected");
+            data.name = poster.childNodes[1].textContent;
+        }
     });
 });
 
@@ -25,7 +32,6 @@ const next2 = step2.querySelector('#next2');
 
 firstname.addEventListener("keyup", () => {
     user_firstname = firstname.value;
-    console.log(user_firstname)
 })
 
 lastname.addEventListener("keyup", () => {

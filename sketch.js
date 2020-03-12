@@ -90,7 +90,7 @@ function setup() {
     ticket.totalWidht = 576;
     ticket.totalHeight = 240;
     //ticket.bgColor = color(`hsb(${data.color}, 50%, 40%)`);
-    ticket.bgColor = color(`hsb(${data.color}, 50%, 20%)`);
+    ticket.bgColor = color(`hsb(${data.name.length}, 50%, 20%)`);
     console.log("BG Color : ",ticket.bgColor);
 
     // INFOBOX
@@ -138,7 +138,7 @@ function setup() {
 }
 
 function draw() {
-    background(ticket.bgColor);
+    background(color(`hsb(${data.name.length * 5}, 50%, 20%)`));
     drawLeftPart(432, 240)
     drawDetachablePart()
     push();
