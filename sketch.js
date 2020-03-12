@@ -31,10 +31,10 @@ let data = {};
 let user_firstname;
 let user_lastname;
 let tabData = [
-    ['Room', 'D'],
-    ['Sit', '15'],
-    ['AA', 'XX'],
-    ['BB', 'YY'],
+    ['Sit', '24'],
+    ['Rank', 'D'],
+    ['Block', 'XX'],
+    ['Gate', 'YY'],
 ];
 
 //Font Preload
@@ -43,9 +43,9 @@ let exo2;
 let narrow;
 let saira;
 function preload() {
-    exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
-    narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
-    saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
+    // exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
+    // narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
+    // saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
 }
 
 
@@ -66,12 +66,12 @@ function setup() {
     
 
     //textFont(exo2);
-    textFont(narrow);
+    //textFont(narrow);
     //textFont(saira);
     
     // DATA
     // background
-    data.name = "nomdugroupe";
+    data.name = "";
     data.month = floor(random(1, 12));
     data.color = data.name.length * data.month;
 
@@ -81,7 +81,7 @@ function setup() {
     ticket.patternW = 431;
     ticket.patternH = 240;
 
-    data.buyer = "John Doe"
+    data.buyer = "";
     data.place = floor(random(1, 760));
     data.dateTransaction = Date.now();
     data.pattern = (data.buyer.length * data.place * data.dateTransaction)%360;
@@ -105,7 +105,7 @@ function setup() {
     // Motif généré
     ticket.randomColors = [];
     for (let i = 0; i < ticket.rowCount; i++) {
-        let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.1)`);
+        let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.2)`);
         ticket.randomColors.push(c);
     };
     console.log("Pattern Color : ",ticket.randomColors);
@@ -160,6 +160,15 @@ function draw() {
 
 
 function drawLeftPart(w, h) {
+    data.buyer = "John Doe";
+    if(user_firstname) {data.buyer = user_firstname;}
+    if(user_lastname) {data.buyer += user_lastname;}
+    data.pattern = (data.buyer.length * data.place * data.dateTransaction)%360;
+    ticket.randomColors = [];
+    for (let i = 0; i < ticket.rowCount; i++) {
+        let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.2)`);
+        ticket.randomColors.push(c);
+    };
     randomSeed(ticket.seed);
     noStroke();
     push();
@@ -169,9 +178,10 @@ function drawLeftPart(w, h) {
         for (let j = 0; j < ticket.rowCount; j++) {
             let x = i * cellW;
             let y = j * cellH;
+            rotate(random(0, data.place));
             fill(ticket.randomColors[i]);
             push();
-            rect(x, y, random(cellW)*ticket.rectWidth, random(cellH))*ticket.rectTotalHeight;
+            rect(x, y, random(cellW)*ticket.rectWidth*data.place, random(cellH))*ticket.rectTotalHeight*data.place;
             pop();
         };
     };
@@ -228,7 +238,7 @@ function drawUserInfo(x, y, firstname, lastname) {
     textSize(32);
     fill(255);
     textAlign(RIGHT);
-    text("NOM DU CONCERT", x, y - 32);
+    text(data.name, x, y - 32);
     textSize(24);
     text(firstname, x, y);
     text(lastname, x, y + 24);
