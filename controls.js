@@ -1,41 +1,40 @@
+// First step
 const step0 = document.querySelector('.step0');
 const posters = step0.querySelectorAll('.poster');
 const next = step0.querySelector('#next');
+const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
 posters.forEach((poster) => {
     poster.addEventListener('mousedown', (e) => {
+        // If already selected, remove the changes
         if(poster.classList.contains("selected")) {
             posters.forEach(function(poster) {
                 poster.classList.remove("selected");
             });
-            data.name = "";
-            data.style = "";
-        } else {
+            concertSelection("reset");
+        } else { // Selecting a concert
             posters.forEach(function(poster) {
                 poster.classList.remove("selected");
             });
             e.preventDefault();
             poster.classList.add("selected");
-            data.name = poster.children[1].textContent;
-            data.style = poster.children[2].textContent;
-            console.log(count(data.name));
-            console.log(data.style.length);
-            console.log(count(data.name) * data.style.length);
-            data.color = (count(data.name) * data.style.length)%360;
-            console.log(data.color);
+            concertSelection(poster);
         }
     });
 });
 
+next.addEventListener("mousedown", () => {
+    step0.classList.add("hidden");
+    step1.classList.remove("hidden");
+})
+
+
+// 2nd step
 const step1 = document.querySelector('.step1');
 const firstname = step1.querySelector('#firstname');
 const lastname = step1.querySelector('#lastname');
 const previous1 = step1.querySelector('#previous1');
 const next1 = step1.querySelector('#next1');
-
-const step2 = document.querySelector('.step2');
-const previous2 = step2.querySelector('#previous2');
-const next2 = step2.querySelector('#next2');
 
 firstname.addEventListener("keyup", () => {
     user_firstname = firstname.value;
@@ -43,11 +42,6 @@ firstname.addEventListener("keyup", () => {
 
 lastname.addEventListener("keyup", () => {
     user_lastname = lastname.value;
-})
-
-next.addEventListener("mousedown", () => {
-    step0.classList.add("hidden");
-    step1.classList.remove("hidden");
 })
 
 next1.addEventListener("mousedown", () => {
@@ -60,52 +54,78 @@ previous1.addEventListener("mousedown", () => {
     step1.classList.add("hidden");
 })
 
+// 3rd step
+const step2 = document.querySelector('.step2');
+const block = step2.querySelector('#block');
+const row = step2.querySelector('#row');
+const previous2 = step2.querySelector('#previous2');
+const next2 = step2.querySelector('#next2');
+
+next2.addEventListener("mousedown", () => {
+    data.seat = data.seatTemp;
+    tabData[0][1] = data.seat;
+    tabData[1][1] = row.value;
+    tabData[2][1] = block.value;
+    tabData[3][1] = count(block.value);
+})
+
 previous2.addEventListener("mousedown", () => {
     step1.classList.remove("hidden");
     step2.classList.add("hidden");
+    data.seat = 0;
+    tabData[0][1] = '';
+    tabData[1][1] = '';
+    tabData[2][1] = '';
 })
 
 
-function str_split(string, split_length) {
-    //  discuss at: http://phpjs.org/functions/str_split/
-    // original by: Martijn Wieringa
-    // improved by: Brett Zamir (http://brett-zamir.me)
-    // bugfixed by: Onno Marsman
-    //  revised by: Theriault
-    //  revised by: Rafał Kukawski (http://blog.kukawski.pl/)
-    //    input by: Bjorn Roesbeke (http://www.bjornroesbeke.be/)
-    //   example 1: str_split('Hello Friend', 3);
-    //   returns 1: ['Hel', 'lo ', 'Fri', 'end']
-  
-    if (split_length == null) {
-      split_length = 1;
-    }
-    if (string == null || split_length < 1) {
-      return false;
-    }
+const str_split = (string, split_length) => {  
+    if (split_length == null)
+        split_length = 1;
+    
+    if (string == null || split_length < 1)
+        return false;
+    
     string += '';
-    var chunks = [],
-      pos = 0,
-      len = string.length;
+    let chunks = [],
+        pos = 0,
+        len = string.length;
+
     while (pos < len) {
-      chunks.push(string.slice(pos, pos += split_length));
+        chunks.push(string.slice(pos, pos += split_length));
     }
   
     return chunks;
-  }
+}
   
   
-  function count(string){
-      var alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+const count = (string) => {
+    const alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
   
-      var splitted_string = str_split(string);
-  
-      var count = 0;
-      for (i = 0; i < splitted_string.length; i++) { 
-          var letterPosition = alphabet.indexOf(splitted_string[i])+1;
-          count = count + letterPosition;
-      }
-      return count;
-  }
-  
-  
+    const splitted_string = str_split(string);
+
+    let count = 0;
+    for (i = 0; i < splitted_string.length; i++) { 
+        let letterPosition = alphabet.indexOf(splitted_string[i])+1;
+        count = count + letterPosition;
+    }
+    return count;
+}
+
+const concertSelection = (e) => {
+    if(e === "reset" ) {
+        data.name = "";
+        data.day = "";
+        data.month = 0;
+        data.year = "";
+        data.style = "";
+        data.color = 0;
+    } else {
+        data.name = e.children[1].textContent;
+        data.day = e.children[2].dataset["day"];
+        data.month = e.children[2].dataset["month"];
+        data.year = e.children[2].dataset["year"];
+        data.style = e.children[3].textContent;
+        data.color = (count(data.name) * data.style.length * data.month)%360;
+    }
+}

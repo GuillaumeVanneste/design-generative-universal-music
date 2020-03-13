@@ -2,17 +2,13 @@
 - paramètre random -
 nom du groupe
 date -> concert
-position géographique
 salle / siege
-(heure de debut et fin)
 Nom du spectateur
 
 - inspi -
 luminescence
 
-
 - TODO -
-Animation generatif
 nom du concert
 
 Visu génératif --> nom du spectateur + place + timestamp transaction
@@ -31,10 +27,10 @@ let data = {};
 let user_firstname;
 let user_lastname;
 let tabData = [
-    ['Sit', '24'],
-    ['Rank', 'D'],
-    ['Block', 'XX'],
-    ['Gate', 'YY'],
+    ['Seat', ''],
+    ['Row', ''],
+    ['Block', ''],
+    ['Gate', ''],
 ];
 
 //Font Preload
@@ -43,9 +39,9 @@ let exo2;
 let narrow;
 let saira;
 function preload() {
-    // exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
-    // narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
-    // saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
+    exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
+    narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
+    saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
 }
 
 
@@ -73,7 +69,7 @@ function setup() {
     // background
     data.name = "";
     data.style = "";
-    data.month = floor(random(1, 12));
+    data.month = "";
     data.color = data.name.length * data.month;
 
     // pattern
@@ -83,9 +79,11 @@ function setup() {
     ticket.patternH = 240;
 
     data.buyer = "";
-    data.place = floor(random(1, 760));
+    data.seatTemp = floor(random(1, 760));
+    data.gateTemp = floor(random(1,4));
+    data.seat = 0;
     data.dateTransaction = Date.now();
-    data.pattern = (data.buyer.length * data.place * data.dateTransaction)%360;
+    data.pattern = (data.buyer.length * (data.seat + 1) * data.dateTransaction)%360;
 
     // TICKET
     ticket.totalWidht = 576;
@@ -112,17 +110,6 @@ function setup() {
     console.log("Pattern Color : ",ticket.randomColors);
     console.log("Pattern : ",data.pattern);
     ticket.patternColor = color(`hsb(${data.pattern}, 50%, 20%)`);
-
-
-    /* Web Image random color
-    ticket.randomColors = [];
-    for(let i = 0; i < 10; i++) {
-        let x = random(webImage.width);
-        let y = random(webImage.height);
-        let c = webImage.get(x,y);
-        ticket.randomColors.push(c);
-    }
-    */
     
     // Barcode
     barcode.startX = detachable.startX + 90;
@@ -164,7 +151,7 @@ function drawLeftPart(w, h) {
     data.buyer = "John Doe";
     if(user_firstname) {data.buyer = user_firstname;}
     if(user_lastname) {data.buyer += user_lastname;}
-    data.pattern = (data.buyer.length * data.place * data.dateTransaction)%360;
+    data.pattern = (data.buyer.length * data.dateTransaction)%360;
     ticket.randomColors = [];
     for (let i = 0; i < ticket.rowCount; i++) {
         let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.2)`);
@@ -179,10 +166,10 @@ function drawLeftPart(w, h) {
         for (let j = 0; j < ticket.rowCount; j++) {
             let x = i * cellW;
             let y = j * cellH;
-            rotate(random(0, data.place));
+            rotate(data.seat);
             fill(ticket.randomColors[i]);
             push();
-            rect(x, y, random(cellW)*ticket.rectWidth*data.place, random(cellH))*ticket.rectTotalHeight*data.place;
+            rect(x, y, random(cellW)*ticket.rectWidth*data.seat, random(cellH))*ticket.rectTotalHeight*data.seat;
             pop();
         };
     };
@@ -214,7 +201,7 @@ function drawBarcode(posX, posY) {
 }
 
 function drawInfo(x, y, label, value) {
-    let c = color(`hsb(${data.pattern}, 50%, 90%)`); // Si h = une certaine valeur -> passer la font en white ?
+    let c = color(`hsb(${data.pattern}, 50%, 90%)`);
     fill(c);
     rect(x, y, infoBox.widht, infoBox.height, 20);
     push();
@@ -236,8 +223,14 @@ function drawInfo(x, y, label, value) {
 }
 
 function drawUserInfo(x, y, firstname, lastname) {
-    textSize(32);
+    textSize(48);
     fill(255);
+    textAlign(LEFT);
+    text(data.day, 4, y - 18);
+    textSize(24);
+    text(monthArray[data.month - 1], 64, y - 38);
+    text(data.year, 64, y - 18);
+    textSize(32);
     textAlign(RIGHT);
     text(data.name, x, y - 32);
     textSize(24);
@@ -254,15 +247,3 @@ function keyTyped() {
         barcode.seed = random(500);
     }
 }
-
-
-/*
-Alpha color example
-let c = s.randomColors[floor(random(s.randomColors.length))];
-let alpha = 10;
-let c_r = red(c);
-let c_g = green(c); 
-let c_b = blue(c); 
-fill(c_r, c_g, c_b, alpha);
-*/
-

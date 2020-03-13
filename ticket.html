@@ -20,14 +20,16 @@
                             <div class="col-6">
                                 <div class="poster mb-1">
                                     <img style="width: 100%;" src="assets/images/concert-affiche-1.jpg" alt="">
-                                    <span class="concertName">The Weeknd</span>
+                                    <span class="concertName">THE WEEKND</span>
+                                    <span class="concertDate float-right" data-year="2020" data-month="11" data-day="12">12 Nov</span>
                                     <p class="style">RnB</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="poster mb-1">
                                     <img style="width: 100%;" src="assets/images/concert-affiche-2.jpg" alt="">
-                                    <span class="concertName">Meute</span>
+                                    <span class="concertName">MEUTE</span>
+                                    <span class="concertDate float-right" data-year="2020" data-month="5" data-day="20">20 Mai</span>
                                     <p class="style">Electro</p>
                                 </div>
                             </div>
@@ -36,15 +38,17 @@
                             <div class="col-6">
                                 <div class="poster mb-1">
                                     <img style="width: 100%;" src="assets/images/concert-affiche-3.jpg" alt="">
-                                    <span class="concertName">Bloc party</span>
+                                    <span class="concertName">BLOC PARTY</span>
+                                    <span class="concertDate float-right"data-year="2020" data-month="9" data-day="28">28 Sept</span>
                                     <p class="style">Rock</p>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="poster mb-1">
                                     <img style="width: 100%;" src="assets/images/concert-affiche-2.jpg" alt="">
-                                    <span class="concertName">Nom du concert 4</span>
-                                    <p class="style">sssss</p>
+                                    <span class="concertName">NOM CONCERT</span>
+                                    <span class="concertDate float-right" data-year="2020" data-month="12" data-day="02">02 Dec</span>
+                                    <p class="style">Jazz</p>
                                 </div>
                             </div>
                         </div>
@@ -81,12 +85,25 @@
                         <h2 class="mb-5">Ma place</h2>
                         <form id="form2">
                             <div class="form-group">
-                                <label for="firstname">Block ?</label>
-                                <input type="text" class="form-control" id="firstname" maxlength="20">
+                                <label for="block">Block</label>
+                                <select class="form-control" name="block" id="block">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label for="lastname">Rank ?</label>
-                                <input type="text" class="form-control" id="lastname" maxlength="20">
+                                <label for="row">Row</label>
+                                <select class="form-control" name="row" id="row">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
                             </div>
                             <div class="row justify-content-between">
                                 <button id="previous2" type="button" class="btn btn-primary btn-lg">Précédent</button>
