@@ -28,8 +28,12 @@ posters.forEach((poster) => {
 });
 
 next.addEventListener("mousedown", () => {
-    step0.classList.add("hidden");
-    step1.classList.remove("hidden");
+    for(let i = 0; i < posters.length; i++) {
+        if(posters[i].classList.contains("selected")) {
+            step0.classList.add("hidden");
+            step1.classList.remove("hidden");
+        }
+    }
 })
 
 
@@ -40,16 +44,18 @@ const previous1 = step1.querySelector('#previous1');
 const next1 = step1.querySelector('#next1');
 
 firstname.addEventListener("keyup", () => {
-    user_firstname = firstname.value;
+    data.userFirstname = firstname.value;
 })
 
 lastname.addEventListener("keyup", () => {
-    user_lastname = lastname.value;
+    data.userLastname = lastname.value;
 })
 
 next1.addEventListener("mousedown", () => {
-    step1.classList.add("hidden");
-    step2.classList.remove("hidden");
+    if(firstname.value && lastname.value) {
+        step1.classList.add("hidden");
+        step2.classList.remove("hidden");
+    }
 })
 
 previous1.addEventListener("mousedown", () => {
@@ -67,8 +73,9 @@ next2.addEventListener("mousedown", () => {
     step2.classList.add("hidden");
     step3.classList.remove("hidden");
     data.seat = data.seatTemp;
+    data.row = row.value;
     tabData[0][1] = data.seat;
-    tabData[1][1] = row.value;
+    tabData[1][1] = data.row;
     tabData[2][1] = block.value;
     tabData[3][1] = count(block.value);
 })

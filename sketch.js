@@ -24,8 +24,7 @@ let barcode = {};
 let seed;
 let infoBox = {};
 let data = {};
-let user_firstname;
-let user_lastname;
+let date= {};
 let tabData = [
     ['Seat', ''],
     ['Row', ''],
@@ -40,8 +39,8 @@ let narrow;
 let saira;
 function preload() {
     exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
-    narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
-    saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
+    // narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
+    // saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
 }
 
 
@@ -81,6 +80,7 @@ function setup() {
     data.seatTemp = floor(random(1, 760));
     data.gateTemp = floor(random(1,4));
     data.seat = 0;
+    data.row = 0;
     data.dateTransaction = Date.now();
     data.pattern = (data.buyer.length * (data.seat + 1) * data.dateTransaction)%360;
 
@@ -99,6 +99,9 @@ function setup() {
     infoBox.startY = (ticket.totalHeight - (infoBox.height + (infoBox.height + infoBox.marginBetween) * 3)) / 2;
     console.log(infoBox.startY);
 
+    //Date position
+    date.posX = 72;
+    date.posY = 56;
 
     // Motif généré
     ticket.randomColors = [];
@@ -140,14 +143,19 @@ function draw() {
         drawInfo(infoBox.startX, infoBox.startY + (infoBox.height + infoBox.marginBetween) * i, tabData[i][0], tabData[i][1]);
     }
 
-    drawUserInfo(data.day, monthArray[data.month - 1], data.year, data.artistName, user_firstname, user_lastname);
+    // Draw date, artist's name and buyer info
+    drawUserInfo(
+        date.posX, date.posY,
+        data.day, monthArray[data.month - 1], data.year, data.artistName,
+        data.userFirstname, data.userLastname
+    );
 }
 
 
 function drawLeftPart(w, h) {
     data.buyer = "";
-    if(user_firstname) {data.buyer = user_firstname;}
-    if(user_lastname) {data.buyer += "_" + user_lastname;}
+    if(data.userFirstname) {data.buyer = data.userFirstname;}
+    if(data.userLastname) {data.buyer += "_" + data.userLastname;}
     data.pattern = (data.buyer.length * data.dateTransaction)%360;
     ticket.randomColors = [];
     for (let i = 0; i < ticket.rowCount; i++) {
@@ -163,7 +171,7 @@ function drawLeftPart(w, h) {
         for (let j = 0; j < ticket.rowCount; j++) {
             let x = i * cellW;
             let y = j * cellH;
-            rotate(data.seat);
+            rotate(data.seat * data.row);
             fill(ticket.randomColors[i]);
             push();
             rect(x, y, random(cellW)*ticket.rectWidth*data.seat, random(cellH))*ticket.rectTotalHeight*data.seat;
@@ -219,16 +227,16 @@ function drawInfo(x, y, label, value) {
     pop();
 }
 
-function drawUserInfo(day, month, year, artistName, firstname, lastname) {
+function drawUserInfo(dateX, dateY, day, month, year, artistName, firstname, lastname) {
     // Concert's date info
     textSize(56);
     fill(255);
     textAlign(RIGHT);
-    text(day, 72, 56);
+    text(day, dateX, dateY);
     textSize(24);
     textAlign(LEFT);
-    text(month, 72, 32);
-    text(year, 72, 56);
+    text(month, dateX, dateY - 24);
+    text(year, dateX, dateY);
     // Artist & buyer's info
     textSize(32);
     textAlign(RIGHT);
