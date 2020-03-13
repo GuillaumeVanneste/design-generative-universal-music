@@ -39,8 +39,6 @@ let narrow;
 let saira;
 function preload() {
     exo2 = loadFont('assets/fonts/Exo_2/Exo2-Regular.ttf');
-    // narrow = loadFont('assets/fonts/PT_Sans_Narrow/PTSansNarrow-Regular.ttf');
-    // saira = loadFont('assets/fonts/Saira_Extra_Condensed/SairaExtraCondensed-Regular.ttf');
 }
 
 
@@ -57,11 +55,9 @@ detachable.borderCount = 40;
 function setup() {
     //pixelDensity(4);
     ticket.seed = random(500);
-    
 
+    // 
     textFont(exo2);
-    //textFont(narrow);
-    //textFont(saira);
     
     // DATA
     // background
@@ -171,7 +167,7 @@ function drawLeftPart(w, h) {
         for (let j = 0; j < ticket.rowCount; j++) {
             let x = i * cellW;
             let y = j * cellH;
-            rotate(data.seat * data.row);
+            rotate(random(0, data.seat * data.row));
             fill(ticket.randomColors[i]);
             push();
             rect(x, y, random(cellW)*ticket.rectWidth*data.seat, random(cellH))*ticket.rectTotalHeight*data.seat;
@@ -246,6 +242,8 @@ function drawUserInfo(dateX, dateY, day, month, year, artistName, firstname, las
     text(lastname, detachable.startX - 16, 96);
 }
 
+/*
+
 function keyTyped() {
     if (key === 's') {
         saveCanvas(data.artistName + "_" + data.buyer + "_" + data.month + "_" + data.day, 'jpg');
@@ -255,3 +253,5 @@ function keyTyped() {
         barcode.seed = random(500);
     }
 }
+
+*/
