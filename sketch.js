@@ -58,19 +58,18 @@ detachable.borderCount = 40;
 function setup() {
     //pixelDensity(4);
     ticket.seed = random(500);
-    frameRate(20);
     
 
-    //textFont(exo2);
+    textFont(exo2);
     //textFont(narrow);
     //textFont(saira);
     
     // DATA
     // background
-    data.name = "";
+    data.artistName = "";
     data.style = "";
     data.month = "";
-    data.color = data.name.length * data.month;
+    data.color = data.artistName.length * data.month;
 
     // pattern
     ticket.startX = 75;
@@ -89,7 +88,7 @@ function setup() {
     ticket.totalWidht = 576;
     ticket.totalHeight = 240;
     //ticket.bgColor = color(`hsb(${data.color}, 50%, 40%)`);
-    ticket.bgColor = color(`hsb(${data.name.length}, 50%, 20%)`);
+    ticket.bgColor = color(`hsb(${data.artistName.length}, 50%, 20%)`);
     console.log("BG Color : ",ticket.bgColor);
 
     // INFOBOX
@@ -107,8 +106,6 @@ function setup() {
         let c = color(`hsba(${data.pattern},${random(20,100)}%,${random(30,100)}%,0.2)`);
         ticket.randomColors.push(c);
     };
-    console.log("Pattern Color : ",ticket.randomColors);
-    console.log("Pattern : ",data.pattern);
     ticket.patternColor = color(`hsb(${data.pattern}, 50%, 20%)`);
     
     // Barcode
@@ -130,7 +127,7 @@ function draw() {
     drawLeftPart(432, 240)
     drawDetachablePart()
     push();
-    translate(detachable.startX - barcode.rectTotalHeight*0.2, ticket.totalHeight - barcode.rectWidth * 1.2);
+    translate(detachable.startX - 16, ticket.totalHeight - barcode.rectWidth - 16);
     rotate(radians(90));
     drawBarcode(0, 0);
     for(let i=0; i < tabData.length; i++) {
@@ -143,14 +140,14 @@ function draw() {
         drawInfo(infoBox.startX, infoBox.startY + (infoBox.height + infoBox.marginBetween) * i, tabData[i][0], tabData[i][1]);
     }
 
-    drawUserInfo(detachable.startX - 12, 72, user_firstname, user_lastname);
+    drawUserInfo(data.day, monthArray[data.month - 1], data.year, data.artistName, user_firstname, user_lastname);
 }
 
 
 function drawLeftPart(w, h) {
-    data.buyer = "John Doe";
+    data.buyer = "";
     if(user_firstname) {data.buyer = user_firstname;}
-    if(user_lastname) {data.buyer += user_lastname;}
+    if(user_lastname) {data.buyer += "_" + user_lastname;}
     data.pattern = (data.buyer.length * data.dateTransaction)%360;
     ticket.randomColors = [];
     for (let i = 0; i < ticket.rowCount; i++) {
@@ -222,25 +219,28 @@ function drawInfo(x, y, label, value) {
     pop();
 }
 
-function drawUserInfo(x, y, firstname, lastname) {
-    textSize(48);
+function drawUserInfo(day, month, year, artistName, firstname, lastname) {
+    // Concert's date info
+    textSize(56);
     fill(255);
-    textAlign(LEFT);
-    text(data.day, 4, y - 18);
+    textAlign(RIGHT);
+    text(day, 72, 56);
     textSize(24);
-    text(monthArray[data.month - 1], 64, y - 38);
-    text(data.year, 64, y - 18);
+    textAlign(LEFT);
+    text(month, 72, 32);
+    text(year, 72, 56);
+    // Artist & buyer's info
     textSize(32);
     textAlign(RIGHT);
-    text(data.name, x, y - 32);
+    text(artistName, detachable.startX - 16, 34);
     textSize(24);
-    text(firstname, x, y);
-    text(lastname, x, y + 24);
+    text(firstname, detachable.startX - 16, 72);
+    text(lastname, detachable.startX - 16, 96);
 }
 
 function keyTyped() {
     if (key === 's') {
-        saveCanvas('mySketch', 'jpg');
+        saveCanvas(data.artistName + "_" + data.buyer + "_" + data.month + "_" + data.day, 'jpg');
     }
 
     if(key === 'q') {

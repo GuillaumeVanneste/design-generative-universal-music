@@ -1,5 +1,9 @@
-// First step
 const step0 = document.querySelector('.step0');
+const step1 = document.querySelector('.step1');
+const step2 = document.querySelector('.step2');
+const step3 = document.querySelector('.step3');
+
+// First step
 const posters = step0.querySelectorAll('.poster');
 const next = step0.querySelector('#next');
 const monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -30,7 +34,6 @@ next.addEventListener("mousedown", () => {
 
 
 // 2nd step
-const step1 = document.querySelector('.step1');
 const firstname = step1.querySelector('#firstname');
 const lastname = step1.querySelector('#lastname');
 const previous1 = step1.querySelector('#previous1');
@@ -55,13 +58,14 @@ previous1.addEventListener("mousedown", () => {
 })
 
 // 3rd step
-const step2 = document.querySelector('.step2');
 const block = step2.querySelector('#block');
 const row = step2.querySelector('#row');
 const previous2 = step2.querySelector('#previous2');
 const next2 = step2.querySelector('#next2');
 
 next2.addEventListener("mousedown", () => {
+    step2.classList.add("hidden");
+    step3.classList.remove("hidden");
     data.seat = data.seatTemp;
     tabData[0][1] = data.seat;
     tabData[1][1] = row.value;
@@ -76,6 +80,20 @@ previous2.addEventListener("mousedown", () => {
     tabData[0][1] = '';
     tabData[1][1] = '';
     tabData[2][1] = '';
+    tabData[3][1] = '';
+})
+
+// 4th step
+const previous3 = step3.querySelector('#previous3');
+const downloadButton = step3.querySelector('#download');
+
+previous3.addEventListener("mousedown", () => {
+    step2.classList.remove("hidden");
+    step3.classList.add("hidden");
+})
+
+downloadButton.addEventListener("mousedown", () => {
+    saveCanvas(data.artistName + "_" + data.buyer + "_" + data.month + "_" + data.day, 'jpg');
 })
 
 
@@ -114,18 +132,18 @@ const count = (string) => {
 
 const concertSelection = (e) => {
     if(e === "reset" ) {
-        data.name = "";
+        data.artistName = "";
         data.day = "";
         data.month = 0;
         data.year = "";
         data.style = "";
         data.color = 0;
     } else {
-        data.name = e.children[1].textContent;
+        data.artistName = e.children[1].textContent;
         data.day = e.children[2].dataset["day"];
         data.month = e.children[2].dataset["month"];
         data.year = e.children[2].dataset["year"];
         data.style = e.children[3].textContent;
-        data.color = (count(data.name) * data.style.length * data.month)%360;
+        data.color = (count(data.artistName) * data.style.length * data.month)%360;
     }
 }
